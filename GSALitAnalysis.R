@@ -1,37 +1,32 @@
 #GSA Lightning Analysis
 
-#tutorial
+
 library(devtools) 
 #install_github("billyhw/GSALightning")
 library(GSALightning)
+library(data.table)
 library(ELMER)
 library(ELMER.data)
-data(expression)
-data(sampleInfo)
-data(targetGenes)
+##for tutorial
+#data(expression)
+#data(sampleInfo)
+#data(targetGenes)
 
-expression <- expression[apply(expression,1,sd) != 0,]
 
-GSALightResults <- GSALight(eset = expression, fac = factor(sampleInfo$TN), gs = targetGenes, 
-                            nperm = 1000, minsize = 10, rmGSGenes = 'gene')
+#load necessary files
+gene_sets <- gene_sets = list(top_65=asd_mouse, top_reg=reg_mouse)
+info_file <- read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/P2_info_file.txt")
+#genes.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/pogzP2GSA.txt")
+#genes.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/pogze16GSA.txt")
+genes.gsa <- genes.norm[apply(genes.norm,1,sd) != 0,]
+
+GSALigthtResults <- GSALight(eset = genes.gsa, fac = factor(info_file$type), gs = gene_sets, nperm = 10000,
+                            minsize = 1, rmGSGenes = 'gene', verbose=TRUE)
+
+
 head(GSALightResults)
 
-#with my data
-gene.exp <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_EireneData/Data/cuffdiff_out/gene_exp.diff", header=TRUE)
-head(fakeData)
-gene.exp <- gene.exp[gene.exp$status == "OK"
-  & gene.exp$gene != "-", ]
+setwd("/Users/rebeccakrasnoff/Documents/Willsey/POGZ_Eirene/Data/pogz_P2")
 
-gene.exp <- gene.exp[gene.exp$gene == unique(gene.exp$gene),]
+write.table(GSALightResults, file='P2GSALightResults.txt', sep = "\t", quote = FALSE)
 
-list1 <- gene.exp$gene == unique(gene.exp$gene)
-
-uniquegenes <- unique(gene.exp$gene)
-
-gene.gsa <- data.frame("WT" = gene.exp$value_1, "HET" = gene.exp$value_2, row.names = gene.exp$gene)
-nrow(gene.exp)
-nrow(gene.exp.full)
-
-fakeData <- fakeData[apply(fakeData,1,sd) != 0,]
-GSALightResults <- GSALight(eset = expression, fac = factor(sampleInfo$TN), gs = targetGenes, 
-                            nperm = 1000, minsize = 10, rmGSGenes = 'gene')

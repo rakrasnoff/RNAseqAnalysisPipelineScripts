@@ -15,6 +15,8 @@ library(cummeRbund)
 ####### Set working directory
 setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZProject/data/cuffdiff_out") ##write path to file here
 
+#without data loaded from cufflinks
+
 ##background
 gene.exp <- gene.exp.full[
   (gene.exp.full$value_1 >= 1 | gene.exp.full$value_2 >= 1)
@@ -23,7 +25,7 @@ gene.exp <- gene.exp.full[
 nrow(gene.exp)
 nrow(gene.exp.full)
 ##### Define foreground ("gene list") and background genes
-#Parameters for FG genes: difference in expression was >+2x, q value was less than .05,
+#Parameters for FG genes: difference in expression was >+2x, q value was less than .05, = diff expressed genes
 #Note: if not done above, also filter out genes without names, with expression values less than one both sample 1 and 2, and with status !OK
 gene.FG <- gene.exp[
   (gene.exp$log2.fold_change. >= 1 | gene.exp$log2.fold_change. <= -1) 
@@ -35,7 +37,12 @@ gene.BG <- gene.exp
 #### Gene lists are ready for functional annotation
 ### FUNCTIONAL ANNOTATION: UP-REGULATED AND DOWN-REGULATED GENES 
 
+#with data loaded from load from cufflinks
+gene.BG <- gene.exp
+gene.FG <- gene.diff
+
 dyn.load('/Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/jre/lib/server/libjvm.dylib')
+
 require(rJava)
 .jinit()
 .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")

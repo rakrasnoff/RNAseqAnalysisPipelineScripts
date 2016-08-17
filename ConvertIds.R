@@ -33,3 +33,7 @@ convertedids<- select(org.Mm.eg.db, as.vector(gene_list), "ENTREZID", "SYMBOL")
 
 #append vector to dataframe if applicable
 gene.exp$entrez_id <- convertedids$ENTREZID[match(gene.exp$gene, convertedids$SYMBOL)]
+
+#write file
+write.table(gene.exp, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/geneExpConv.csv", quote=FALSE, sep = ",", row.names = FALSE)
+

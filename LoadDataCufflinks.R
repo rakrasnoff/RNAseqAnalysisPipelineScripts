@@ -1,10 +1,9 @@
 #Load Data From Cufflinks, Filter data
 
 #location of your cuff diff file
-setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZProject/data/cuffdiff_out") ##write path to file here
 
 #Load data in
-gene.exp.full <- read.table("gene_exp.diff", header=TRUE)
+gene.exp.full <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/cuffdiff_out/gene_exp.diff", header=TRUE)
 head(gene.exp.full)
 
 #Sort Data 
@@ -22,6 +21,37 @@ gene.exp <- gene.exp.full[
 nrow(gene.exp)
 nrow(gene.exp.full)
 
+#gene.exp is now a cleaned dataset
+
+#identify differentially expressed genes
+gene.diff <- gene.exp[
+  (gene.exp$log2.fold_change. >= 1 | gene.exp$log2.fold_change. <= -1) 
+  & gene.exp$q_value < .05, ]
+list.diff <- gene.diff$gene
+
+
+nrow(gene.diff)
+
 #write new data
 
-write.table(gene.exp, file="gene.exp.csv", header=TRUE, quote=FALSE, sep = ",")
+setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/OutputCharts/pogz_P2/")
+write.table(gene.exp, file="geneExp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
+write.table(gene.diff, file="geneDiff.txt", quote=FALSE, sep="\t", row.names = FALSE)
+write.table(list.diff, file = "listDiff.txt", quote=FALSE, sep="\t", row.names = FALSE)
+
+
+## which genes are upregulated?
+gene.up <- gene.diff[
+  (gene.diff$log2.fold_change. >= 1) , ]
+nrow(gene.up)
+
+## which genes are downregulated?
+
+gene.down <- gene.diff[
+  (gene.diff$log2.fold_change. <= -1) , ]
+nrow(gene.down)
+
+#write to tables
+setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/OutputCharts/pogz_P2/")
+write.table(gene.up, file="geneUp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
+write.table(gene.down, file="geneDown.txt", quote=FALSE, sep = "\t", row.names = FALSE)
