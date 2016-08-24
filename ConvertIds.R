@@ -7,7 +7,7 @@ library(org.Mm.eg.db)
 #Convert Gene IDs
 
 #Give List of Genes as Vector
-gene_list <- gene.exp$gene
+gene_list <- list.diff
 
 #show some genes
 head(gene_list)
@@ -30,9 +30,9 @@ head(select(org.Mm.eg.db, as.vector(gene_list), "ENTREZID", "SYMBOL"),50)
 
 #create vector of converted ids
 convertedids<- select(org.Mm.eg.db, as.vector(gene_list), "ENTREZID", "SYMBOL")
-
+converted_background <- select(org.Mm.eg.db, as.vector(gene_list), "ENTREZID", "SYMBOL")
 #append vector to dataframe if applicable
-gene.exp$entrez_id <- convertedids$ENTREZID[match(gene.exp$gene, convertedids$SYMBOL)]
+#list.diff$entrez_id <- convertedids$ENTREZID[match(gene.exp$gene, convertedids$SYMBOL)]
 
 #write file
 write.table(gene.exp, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/geneExpConv.csv", quote=FALSE, sep = ",", row.names = FALSE)

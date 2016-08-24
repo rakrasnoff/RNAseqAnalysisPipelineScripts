@@ -10,7 +10,7 @@ control.vec <- rep("Control", n/2)
 experimentl.vec <- rep("Experiment", n/2)
 
 
-#creat gene set
+#gs
 genes_mouse <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/RNAseqAnalysisPipeline/Mouse_to_human_gene_conversionKey.csv", sep=",", header=TRUE)
 asd_genes <- read.table("~/Documents/Current/Willsey/HEK293expression/Data/TADA_top65ASDgenes_June2016.csv", sep=",", header=TRUE)
 top_reg <- read.table("~/Documents/Current/Willsey/HEK293expression/Data/TADA_top179ASDgenes_July2016_annotatedByFunction.csv", sep=",", header=TRUE)
@@ -19,13 +19,19 @@ head(genes_mouse)
 head(asd_genes)
 head(top_reg)
 
+
+#for asd genes
+asd_mouse <- merge(genes_mouse, asd_genes, by.x="Human", by.y="RefSeqName")
+reg_mouse <- merge(genes_mouse, top_reg, by.x="Human", by.y="ID")
+
+write.table(asd_mouse, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/RNAseqAnalysisPipeline/RNAseqAnalysisPipelineScripts/asd_mouse.txt", quote=FALSE, sep="\t", row.names=F, col.names=FALSE)
+write.table(reg_mouse, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/RNAseqAnalysisPipeline/RNAseqAnalysisPipelineScripts/reg_mouse.txt", quote=FALSE, sep="\t", row.names=F, col.names=FALSE)
+
+head(reg_mouse)
+head(asd_mouse)
 reg_mouse <- reg_mouse$Mouse
 asd_mouse <- asd_mouse$Mouse
 
-
-head(gene_list)
-gene_list_t <- t(gene_list)
-head(gene_list_t)
 
 ##
 gene_sets = list(top_65=asd_mouse, top_reg=reg_mouse)
@@ -33,5 +39,6 @@ gene_sets = list(top_65=asd_mouse, top_reg=reg_mouse)
 
 
 
+write.table(gene_sets, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/RNAseqAnalysisPipeline/GSA_Lightning.textClippingGSAgenesets.csv", quote=FALSE, sep=",", row.names=TRUE, col.names=FALSE)
 
 

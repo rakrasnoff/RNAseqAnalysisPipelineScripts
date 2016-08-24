@@ -55,3 +55,4 @@ nrow(gene.down)
 setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/OutputCharts/pogz_P2/")
 write.table(gene.up, file="geneUp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
 write.table(gene.down, file="geneDown.txt", quote=FALSE, sep = "\t", row.names = FALSE)
+

@@ -2,7 +2,7 @@
 
 #path to cuffnorm genes.fpkm_tracking file
 #give sample name (P2, or e16)
-sample = "e16"
+sample = "P2"
 
 if (sample == "P2") {
 cuff.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/cuffnorm_out/genes.fpkm_tracking", header=TRUE)
@@ -64,8 +64,16 @@ genes.norm <- data.frame("WT1" = genes.norm$WT1, "WT2" = genes.norm$WT2, "WT3" =
 head(genes.norm) 
 
 #write to file
-setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/")
-write.table(genes.norm, file="pogze16GSA.txt", quote=FALSE, sep = "\t", row.names = TRUE)
+
+if (sample == "P2") {
+  write.table(genes.norm, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/pogzP2GSA.txt", quote=FALSE, sep = "\t", row.names = TRUE)
+  
+}
+
+if (sample == "e16") {
+  write.table(genes.norm, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/pogze16GSA.txt", quote=FALSE, sep = "\t", row.names = TRUE)
+}
+
 
 
 

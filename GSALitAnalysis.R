@@ -14,19 +14,19 @@ library(ELMER.data)
 
 
 #load necessary files
-gene_sets <- gene_sets = list(top_65=asd_mouse, top_reg=reg_mouse)
+gene_sets <- list(top_65=asd_mouse, top_reg=reg_mouse)
 info_file <- read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/P2_info_file.txt")
 #genes.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/pogzP2GSA.txt")
 #genes.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/pogze16GSA.txt")
 genes.gsa <- genes.norm[apply(genes.norm,1,sd) != 0,]
 
-GSALigthtResults <- GSALight(eset = genes.gsa, fac = factor(info_file$type), gs = gene_sets, nperm = 10000,
+GSALightResults <- GSALight(eset = genes.gsa, fac = factor(info_file$type), gs = gene_sets, nperm = 10000,
                             minsize = 1, rmGSGenes = 'gene', verbose=TRUE)
 
 
 head(GSALightResults)
 
-setwd("/Users/rebeccakrasnoff/Documents/Willsey/POGZ_Eirene/Data/pogz_P2")
+setwd("/Users/rebeccakrasnoff/Documents/Willsey/POGZ_Eirene/Data/pogz_e16")
 
-write.table(GSALightResults, file='P2GSALightResults.txt', sep = "\t", quote = FALSE)
+write.table(GSALightResults, file='e16GSALightResults.txt', sep = "\t", quote = FALSE)
 
