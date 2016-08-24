@@ -21,6 +21,17 @@ ui <- shinyUI(fluidPage(
                   max = 50,
                   value = 30)
     ),
+    # Numeric input 
+    sidebarLayout(
+      sidebarPanel(
+        numericInput("bins",
+                    "Number of bins:",
+                    min = 1,
+                    max = 50,
+                    value = 30)
+      ),
+      
+      
 
     # Show a plot of the generated distribution
     mainPanel(
