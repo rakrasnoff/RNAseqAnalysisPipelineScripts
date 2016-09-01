@@ -54,7 +54,7 @@ net = blockwiseModules(datExpr, power = 6,
 #as default, which may not be optimal for other data
 
 #To see how many modules were identified and what module sizes are
-table(net$colors)
+table(net$colors) #what modules are, how big
 
 #display dendrogram with color assignent
 #open a graphics window
@@ -80,6 +80,7 @@ save(MEs, moduleLabels, moduleColors, geneTree,
 
 
 ###########################################################################################
+
 
 
 

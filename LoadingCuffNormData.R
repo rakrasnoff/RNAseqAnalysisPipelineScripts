@@ -74,6 +74,6 @@ if (sample == "e16") {
   write.table(genes.norm, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/pogze16GSA.txt", quote=FALSE, sep = "\t", row.names = TRUE)
 }
 
-
+}
 
 

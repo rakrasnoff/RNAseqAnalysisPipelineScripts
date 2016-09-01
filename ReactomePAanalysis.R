@@ -3,19 +3,22 @@ biocLite("ReactomePA")
 biocLite("clusterProfiler")
 
 library(ReactomePA)
-data(geneList)
-head(geneList)
-length(geneList)
-nrow(geneList)
+#data(geneList)
+#head(geneList)
+#length(geneList)
+#nrow(geneList)
 library(org.Hs.eg.db)
 library(org.Mm.eg.db)
 
-#load in data using load cufflinks
-#convert to entrez ids using conversion script
+#load data from id-converting-script
+getwd()
+wrkdir <- "/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2"
+setwd(wrkdir)
 
-#gene <- convertedids
-universe <- converted_background$ENTREZID
-gene <- convertedids$ENTREZID
+load("convertedIds.RDATA")
+
+universe <- convertedExp$ENTREZID
+gene <- convertedDiff$ENTREZID
 
 x <- enrichPathway(as.vector(gene), organism = "mouse", pvalueCutoff = 0.05,
                    pAdjustMethod = "fdr", qvalueCutoff = 0.2, as.vector(universe), minGSSize = 10,

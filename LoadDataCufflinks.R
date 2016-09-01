@@ -3,7 +3,9 @@
 #location of your cuff diff file
 
 #Load data in
-gene.exp.full <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/cuffdiff_out/gene_exp.diff", header=TRUE)
+wrkdir <- "/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/"
+setwd(wrkdir)
+gene.exp.full <- read.delim("gene_exp.diff")
 head(gene.exp.full)
 
 #Sort Data 
@@ -22,6 +24,7 @@ nrow(gene.exp)
 nrow(gene.exp.full)
 
 #gene.exp is now a cleaned dataset
+print("gene.exp is now a clean dataset")
 
 #identify differentially expressed genes
 gene.diff <- gene.exp[
@@ -29,16 +32,13 @@ gene.diff <- gene.exp[
   & gene.exp$q_value < .05, ]
 list.diff <- gene.diff$gene
 
-
 nrow(gene.diff)
 
 #write new data
 
-setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/OutputCharts/pogz_P2/")
 write.table(gene.exp, file="geneExp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
 write.table(gene.diff, file="geneDiff.txt", quote=FALSE, sep="\t", row.names = FALSE)
 write.table(list.diff, file = "listDiff.txt", quote=FALSE, sep="\t", row.names = FALSE)
-
 
 ## which genes are upregulated?
 gene.up <- gene.diff[
@@ -52,7 +52,7 @@ gene.down <- gene.diff[
 nrow(gene.down)
 
 #write to tables
-setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/OutputCharts/pogz_P2/")
 write.table(gene.up, file="geneUp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
 write.table(gene.down, file="geneDown.txt", quote=FALSE, sep = "\t", row.names = FALSE)
+save(gene.exp, gene.diff, gene.up, gene.down, file = "cuffLinksLoaded.RData")
 

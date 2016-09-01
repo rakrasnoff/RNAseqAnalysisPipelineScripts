@@ -12,17 +12,19 @@ options(stringsAsFactors = FALSE);
 #Read in my dataset - using dataset from load cuffnorm
 #femData = read.csv("LiverFemale3600.csv") - rather than loading in, using genes.norm for P2 right now
 # Take a quick look at what is in the data set:
-dim(genes.norm)
-names(genes.norm)
-fix(genes.norm)
+#dim(genes.norm)
+#names(genes.norm)
 
 #The expression data set contains 6 samples. 
 #Note that each row corresponds to a gene and column to a sample or auxiliary information. 
 #We now transpose the expression data for further analysis.
-datExpr0 = as.data.frame(t(genes.norm));
-names(datExpr0) = rownames(genes.norm)
-rownames(datExpr0) = names(genes.norm)
-dim(datExpr0)
+#datExpr0 = as.data.frame(t(genes.norm));
+#names(datExpr0) = rownames(genes.norm)
+#rownames(datExpr0) = names(genes.norm)
+#dim(datExpr0)
+
+load("/Users/rebeccakrasnoff/Documents/Current/Willsey/Hypoxia/Data/pasca-hypoxia-cuffnorm-to-WGCNA.RData")
+
 
 # We first check for genes and samples with too many missing values:
 gsg = goodSamplesGenes(datExpr0, verbose=3)
@@ -55,9 +57,9 @@ plot(sampleTree, main = "Sample clustering to detect outliers", sub = "", xlab =
 
 #choose threshold to remove outlier - #HET1 was outlier
 #plot line to show cut
-abline(h=200000, col="red")
+abline(h=1000000, col="red")
 #determine cluster under the line
-clust = cutreeStatic(sampleTree, cutHeight = 200000, minSize = 0)
+clust = cutreeStatic(sampleTree, cutHeight = 1000000, minSize = 0)
 table(clust)
 #clust 1 contains the samples we want to keep 
 ###Because I have so few samples, this next bit was not helpful, instead, just manually remove outlier
@@ -68,7 +70,7 @@ table(clust)
 
 #manually remove outlier
 rownames(datExpr0)
-datExpr = datExpr0[-4, ]
+datExpr = datExpr0[-56, ]
 rownames(datExpr)
 #the variable datExpr now contains the expression data ready for network analysis
 
@@ -76,20 +78,21 @@ rownames(datExpr)
 #read the trait data and match the samples for which they were measured to the expression samples
 #
 
-traitData = read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/P2_info_file.txt")
-rownames(traitData) = traitData$sample
-dim(traitData)
-names(traitData)
+#traitData = read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/P2_info_file.txt")
+#rownames(traitData) = traitData$sample
+#dim(traitData)
+#names(traitData)
 
 #remove columns with info we don't need - already done for mine, so allTraits just equals traitData
-allTraits = traitData
-rownames(allTraits) = traitData$sample
-dim(allTraits)
-names(allTraits)
+#allTraits = traitData
+#rownames(allTraits) = traitData$sample
+#dim(allTraits)
+#names(allTraits)
+allTraits <- traitDat
 
 #create a data frame analogous to expression data that will hold the clinical traits
 sampleNames = rownames(datExpr)
-traitRows = match(sampleNames, allTraits$sample)
+traitRows = match(sampleNames, allTraits$sampleName)
 datTraits = allTraits[traitRows,] #this gets rid of any samples removed from the cluster in my trait dat
 rownames(datTraits) = allTraits[traitRows, 1]
 
@@ -101,16 +104,16 @@ collectGarbage()
 #recluster samples
 sampleTree2 = hclust(dist(datExpr), method="average")
 #convert traits to color representation: white means low, red means high, grey means missing entry
-traitColors = numbers2colors(as.numeric(datTraits$type), signed=FALSE)
+traitColors = labels2colors(datTraits$V2)
 #plot the sample dendrogram and colors underneath
+dev.new()
 plotDendroAndColors(sampleTree2, traitColors, groupLabels=names(datTraits), 
                     main = "Sample Dendrogram with Trait Heatmap")
 
-#this dendrograph essentially tells me that my HET are experiment samples, and my control are control samples
 
 #Now, save relevant expression and trait data for use in the next steps of this tutorial
-workingDir = "/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/"
+workingDir = "/Users/rebeccakrasnoff/Documents/Current/Willsey/Hypoxia/Data/"
 setwd(workingDir);
-save(datExpr, datTraits, file = "pogz_P2-01-dataInput.RData")
+save(datExpr, datTraits, geneIDS, file = "pasca-hypoxia-dataInput.RData")
 
 
