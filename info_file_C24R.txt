@@ -1,0 +1,8 @@
+lane6_7_R1.fastq.gz    lane6_7_R2.fastq.gz   
+lane8_7_R1.fastq.gz lane8_7_R2.fastq.gz
+lane8_13_R1.fastq.gz   lane8_13_R2.fastq.gz  
+lane6_13_R1.fastq.gz   lane6_13_R2.fastq.gz  
+lane8_19_R1.fastq.gz lane8_19_R2.fastq.gz
+lane7_19_R1.fastq.gz   lane7_19_R2.fastq.gz  
+lane8_25_R1.fastq.gz lane8_25_R2.fastq.gz
+lane7_25_R1.fastq.gz   lane7_25_R2.fastq.gz  

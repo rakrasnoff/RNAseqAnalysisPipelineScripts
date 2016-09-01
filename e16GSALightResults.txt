@@ -1,0 +1,3 @@
+p-value:up-regulated in Control	p-value:up-regulated in Experiment	q-value:up-regulated in Control	q-value:up-regulated in Experiment	statistics: up-regulated in Experiment	# genes
+top_65	0.1477	0.8523	0.2954	0.8523	-0.0620206309873264	53
+top_reg	0.9495	0.0505	0.9495	0.101	0.252506344085457	31
