@@ -1,35 +1,57 @@
 options(stringsAsFactors = FALSE)
 
-wrkdir <- "/Users/rebeccakrasnoff/Documents/Current/Willsey/Hypoxia/Data/times_merged/genes.fpkm_tracking"
-
+#load data
+wrkdir <- "/Users/rebeccakrasnoff/Dropbox/Hypoxia_Data/Data/times_merged/genes.fpkm_tracking"
 myGenes <- read.delim(wrkdir, stringsAsFactors = F)
+
+#look at data
 head(myGenes)
+#right now, genes are rows, and samples are columns (sample_FPKM  sample_conf_lo  sample_conf_hi  sample_status)
 
+############DATA CLEANING##############
+#create new data frame with only genes where status is "OK" for all samples
 myIndex <- apply(myGenes[,grep("status", colnames(myGenes))], 1, function(x) {
-    status <- grepl("LOWDATA", x)
-    !any(status)
-    })
-passingGenes <- myGenes[myIndex, ]
+  status <- grepl("LOWDATA", x)
+  !any(status)
+})
+okGenes <- myGenes[myIndex, ]
 nrow(myGenes)
-nrow(passingGenes)
-head(passingGenes)
+nrow(okGenes)
+head(okGenes)
+#now, data only has genes where status is okay for all samples
 
-#get rid of unusable genes: mir, RP##, AC, commas
-useGenes <- passingGenes[grep("*mir*", passingGenes$gene_short_name, invert=TRUE),]
-nrow(useGenes)
-useGenes <- useGenes[grep("^RP.*-", useGenes$gene_short_name, invert=TRUE),]
-nrow(useGenes)
-useGenes <- useGenes[grep(",", useGenes$gene_short_name, invert=TRUE),]
-nrow(useGenes)
-useGenes <- useGenes[grep("^AC", useGenes$gene_short_name, invert=TRUE),]
-nrow(useGenes)
-#are still duplicate gene names - can get rid of if necessary
-#useGenes <- unique(useGenes)
+##For sencing tables to J
+#write.table(myGenes$gene_short_name, file = "/Users/rebeccakrasnoff/Desktop/allGeneNamesHypoxia.txt", sep = "\t", quote = F)
+#write.table(myGenes, file = "/Users/rebeccakrasnoff/Desktop/allGenesHypoxia.txt", , sep = "\t", quote = F)
+#duplicates <- subset(myGenes, duplicated(gene_short_name))
+#write.table(duplicates$gene_short_name, file = "/Users/rebeccakrasnoff/Desktop/dupNamesGenesHypoxia.txt", sep = "\t", quote = F)
+#write.table(duplicates, file = "/Users/rebeccakrasnoff/Desktop/dupsGenesHypoxia.txt", sep = "\t", quote = F)
 
-passingGenesTrimmed <- useGenes[, grep("FPKM", colnames(passingGenes))]
-geneIDS <- useGenes$gene_short_name
-length(passingGenesTrimmed)
-nrow(passingGenesTrimmed)
+#Get rid of rows that are not genes: 
+gGenes <- okGenes
+badGeneNames <- data.frame("*mir*", "^RP.*-", ",", "^AC", "RNA", "sno", "U8", "U7", "U3", "U6", "U1", "_SRP", "SNORD")
+getGenes <- function(x) {
+  gGenes <<- data.frame(gGenes[grep(x, gGenes$gene_short_name, invert=TRUE),])
+  print(nrow(gGenes))
+}
+apply(badGeneNames, 2, getGenes)
+
+#useGenes <- subset(useGenes, !duplicated(gene_short_name)) #this would get rid of duplicates
+
+#####
+#get rid of genes with <.2 coefficient of variation and/or no FPKM of at least 2 in at least 1 sample
+genes.temp1 <- genes.temp[apply(genes.temp[,-1],1,var) >= .2 & apply(genes.temp[,-1],1,max)>=2,]
+
+###create new dataset with only FPKMS
+#data frame containing only gene Id (first column) and fpkm values for all samples
+geneIdFPKM <- data.frame("geneId" = gGenes$gene_short_name, gGenes[, grep("FPKM", colnames(gGenes))])
+
+#####
+#get rid of genes with <.2 coefficient of variation and/or no FPKM of at least 2 in at least 1 sample
+passingGenes <- geneIdFPKM[apply(geneIdFPKM,1,var) >= .2 & apply(geneIdFPKMs,1,max)>=2,]
+genesWGCNA <- passingGenes[, grep("FPKM", colnames(passingGenes))]
+geneIds <- passingGenes$geneId
+
 
 #load sample info to match trait data
 metadata <- read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/Hypoxia/Data/times_merged/orderedSampleDetails.txt", stringsAsFactors = F, header = F)
@@ -51,3 +73,8 @@ datExpr0 <- t(passingGenesTrimmed)
 #save
 save(datExpr0, traitDat, geneIDS, file = "pasca-hypoxia-cuffnorm-to-WGCNA.RData")
 
+
+
+#####
+
+library(data.table)
