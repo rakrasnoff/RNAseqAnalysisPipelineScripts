@@ -5,7 +5,7 @@
 sample = "P2"
 
 if (sample == "P2") {
-cuff.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/cuffnorm_out/genes.fpkm_tracking", header=TRUE)
+cuff.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/genes.fpkm_tracking", header=TRUE)
 }
 if (sample == "e16") {
 cuff.norm <- read.table("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_e16/genes.fpkm_tracking", header=TRUE)
@@ -38,10 +38,10 @@ head(genes.norm)
 
 #filter where status is not OK
 #filter where name doesn't exist
-genes.norm <- genes.norm[genes.norm$gene.name != "-" & genes.norm$WT1.status == "OK" & genes.norm$WT2.status == "OK"
+genes.norm.trimmed <- genes.norm[genes.norm$WT1.status == "OK" & genes.norm$WT2.status == "OK"
                          & genes.norm$WT3.status == "OK" & genes.norm$HET1.status == "OK" & genes.norm$HET2.status == "OK"
                          & genes.norm$HET3.status == "OK",]
-nrow(genes.norm)
+nrow(genes.norm.trimmed)
 
 #look for ASD names in duplicates
 nrow(genes.norm)
