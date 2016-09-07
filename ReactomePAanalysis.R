@@ -15,16 +15,19 @@ getwd()
 wrkdir <- "/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2"
 setwd(wrkdir)
 
-load("convertedIds.RDATA")
+load("convertedIds.RData")
+convertedExp <- read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/ConvBackground.txt")
 
-universe <- convertedExp$ENTREZID
-gene <- convertedDiff$ENTREZID
+universe <- as.character(convertedExp$ENTREZID)
+#set sample to analyze
+gene <- convertedUp$ENTREZID
 
 x <- enrichPathway(as.vector(gene), organism = "mouse", pvalueCutoff = 0.05,
                    pAdjustMethod = "fdr", qvalueCutoff = 0.2, as.vector(universe), minGSSize = 10,
                    maxGSSize = 500, readable = FALSE)
 head(summary(x))
 results <- x
+save(results, file = "UpRegGoAnalysisResults.RData")
 
 #visualize results
 barplot(x, showCategory = 8)
@@ -36,4 +39,8 @@ enrichMap(x, layout=igraph::layout.kamada.kawai, vertex.label.cex = 1)
 require(clusterProfiler)
 res <- compareCluster(gene, fun="enrichPathway")
 plot(res)
+
+#save results
+wrkdir <- "/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2"
+setwd(wrkdir)
 

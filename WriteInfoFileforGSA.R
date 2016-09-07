@@ -4,7 +4,7 @@ pogzP2info <- data.frame("sample" = c("WT1", "WT2", "WT3", "HET1", "HET2", "HET3
 pogzP2info$type <- as.factor(c("Control", "Control", "Control", "Experiment", "Experiment", "Experiment"))
 #set wd to set file location
 setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2/")
-write.table(pogzP2info, file = "P2_info_file.txt", sep = '/t', row.names=FALSE, col.names=TRUE, quote = FALSE)
+write.table(pogzP2info, file = "P2_info_file.txt", sep = '\t', row.names=FALSE, col.names=TRUE, quote = FALSE)
 #for more samples, use:
 control.vec <- rep("Control", n/2)
 experimentl.vec <- rep("Experiment", n/2)
@@ -39,6 +39,6 @@ gene_sets = list(top_65=asd_mouse, top_reg=reg_mouse)
 
 
 
-write.table(gene_sets, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/RNAseqAnalysisPipeline/GSA_Lightning.textClippingGSAgenesets.csv", quote=FALSE, sep=",", row.names=TRUE, col.names=FALSE)
+#write.table(gene_sets, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/RNAseqAnalysisPipeline/GSA_Lightning.textClippingGSAgenesets.csv", quote=FALSE, sep=",", row.names=TRUE, col.names=FALSE)
 
 

@@ -2,7 +2,7 @@
 getwd();
 # If necessary, change the path below to the directory where the data files are stored.
 # "." means current directory. On Windows use a forward slash / instead of the usual \.
-workingDir = "/Users/rebeccakrasnoff/Downloads/FemaleLiver-Data/"
+#workingDir = "/Users/rebeccakrasnoff/Downloads/FemaleLiver-Data/"
 setwd(workingDir);
 # Load the WGCNA package
 library(WGCNA);

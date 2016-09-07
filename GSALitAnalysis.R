@@ -11,7 +11,7 @@ library(ELMER.data)
 #data(expression)
 #data(sampleInfo)
 #data(targetGenes)
-
+options(stringsAsFactors = TRUE)
 
 #load necessary files
 gene_sets <- list(top_65=asd_mouse, top_reg=reg_mouse)
@@ -26,7 +26,7 @@ GSALightResults <- GSALight(eset = genes.gsa, fac = factor(info_file$type), gs =
 
 head(GSALightResults)
 
-setwd("/Users/rebeccakrasnoff/Documents/Willsey/POGZ_Eirene/Data/pogz_e16")
+setwd("/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/pogz_P2")
 
-write.table(GSALightResults, file='e16GSALightResults.txt', sep = "\t", quote = FALSE)
+write.table(GSALightResults, file='P2GSALightResults.txt', sep = "\t", quote = FALSE)
 

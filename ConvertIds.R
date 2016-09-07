@@ -58,8 +58,9 @@ convertedExp<- select(org.Mm.eg.db, as.vector(gene.exp$gene), "ENTREZID", "SYMBO
 #append vector to dataframe if applicable
 #list.diff$entrez_id <- convertedids$ENTREZID[match(gene.exp$gene, convertedids$SYMBOL)]
 
+
 #write file
-write.table(convertedExp, file="convertedExp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
+write.table(convertedExp, file="/Users/rebeccakrasnoff/Documents/Current/Willsey/POGZ_Eirene/Data/convertedExp.txt", quote=FALSE, sep = "\t", row.names = FALSE)
 
 ###For only up regulated genes
 

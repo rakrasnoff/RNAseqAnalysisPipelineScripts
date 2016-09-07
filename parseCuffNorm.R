@@ -1,5 +1,5 @@
 options(stringsAsFactors = FALSE)
-
+        
 #load data
 wrkdir <- "/Users/rebeccakrasnoff/Dropbox/Hypoxia_Data/Data/times_merged/genes.fpkm_tracking"
 myGenes <- read.delim(wrkdir, stringsAsFactors = F)
@@ -11,7 +11,7 @@ head(myGenes)
 ############DATA CLEANING##############
 #create new data frame with only genes where status is "OK" for all samples
 myIndex <- apply(myGenes[,grep("status", colnames(myGenes))], 1, function(x) {
-  status <- grepl("LOWDATA", x)
+  status <- grep("OK", x, invert=TRUE)
   !any(status)
 })
 okGenes <- myGenes[myIndex, ]
@@ -29,7 +29,7 @@ head(okGenes)
 
 #Get rid of rows that are not genes: 
 gGenes <- okGenes
-badGeneNames <- data.frame("*mir*", "^RP.*-", ",", "^AC", "RNA", "sno", "U8", "U7", "U3", "U6", "U1", "_SRP", "SNORD")
+badGeneNames <- data.frame("*mir*", "-", "^RP.*-", ",", "^AC", "RNA", "sno", "U8", "U7", "U3", "U6", "U1", "_SRP", "SNORD")
 getGenes <- function(x) {
   gGenes <<- data.frame(gGenes[grep(x, gGenes$gene_short_name, invert=TRUE),])
   print(nrow(gGenes))
@@ -38,20 +38,20 @@ apply(badGeneNames, 2, getGenes)
 
 #useGenes <- subset(useGenes, !duplicated(gene_short_name)) #this would get rid of duplicates
 
-#####
-#get rid of genes with <.2 coefficient of variation and/or no FPKM of at least 2 in at least 1 sample
-genes.temp1 <- genes.temp[apply(genes.temp[,-1],1,var) >= .2 & apply(genes.temp[,-1],1,max)>=2,]
-
 ###create new dataset with only FPKMS
 #data frame containing only gene Id (first column) and fpkm values for all samples
 geneIdFPKM <- data.frame("geneId" = gGenes$gene_short_name, gGenes[, grep("FPKM", colnames(gGenes))])
 
 #####
 #get rid of genes with <.2 coefficient of variation and/or no FPKM of at least 2 in at least 1 sample
-passingGenes <- geneIdFPKM[apply(geneIdFPKM,1,var) >= .2 & apply(geneIdFPKMs,1,max)>=2,]
+passingGenes <- geneIdFPKM[apply(geneIdFPKM[,-1],1,var) >= .2 & apply(geneIdFPKM[,-1],1,max)>=2,]
 genesWGCNA <- passingGenes[, grep("FPKM", colnames(passingGenes))]
 geneIds <- passingGenes$geneId
-
+#format for GSA
+passingGenes$geneId[duplicated(passingGenes$geneId)]
+genes.gsa <- subset(passingGenes, !duplicated(passingGenes$geneId))
+genes.gsa <- data.frame(genes.gsa[,-1], row.names = genes.gsa$geneId)
+head(genes.gsa)
 
 #load sample info to match trait data
 metadata <- read.delim("/Users/rebeccakrasnoff/Documents/Current/Willsey/Hypoxia/Data/times_merged/orderedSampleDetails.txt", stringsAsFactors = F, header = F)
